@@ -1,16 +1,38 @@
-# gocarg
+# 🚚 Gocarg — Aplicación Móvil en Flutter
 
-A new Flutter project.
+Gocarg es una aplicación móvil desarrollada en **Flutter** orientada a la exploración y gestión de vehículos de carga (carros y moto-cargas), con una navegación moderna estilo WhatsApp y una arquitectura preparada para crecer.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📱 Vista general
 
-A few resources to get you started if this is your first Flutter project:
+La app cuenta con:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Navegación inferior fija (Bottom Navigation)
+- AppBar dinámico por pantalla
+- Diseño moderno con **Material 3**
+- Pantalla de perfil responsive
+- Estructura modular y escalable
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## ✨ Características principales
+
+✅ Menú de navegación inferior persistente  
+✅ Cambio dinámico de pantallas sin recargar estado  
+✅ AppBar configurable por sección  
+✅ Diseño responsive para dispositivos móviles  
+✅ Código organizado por módulos  
+✅ Preparada para integración con autenticación y backend  
+
+---
+
+## 🧭 Secciones de la aplicación
+
+- 🏠 Home  
+- 🚗 Cars  
+- 🏍 Moto Cargas  
+- 👤 Perfil  
+
+
+
