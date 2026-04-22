@@ -1,74 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gocarg/config/menu/menu_items.dart';
-import 'package:gocarg/presentation/screens/View/home_view.dart';
-import 'package:gocarg/presentation/screens/cars/cars_screen.dart';
-import 'package:gocarg/presentation/screens/motoCars/moto_cars_screen.dart';
-import 'package:gocarg/presentation/screens/porflie/mi_perfil.dart';
-import 'package:gocarg/presentation/widgets/side.dart';
+import 'package:gocarg/config/router/app_routes.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  final Widget child;
+
+  const HomeScreen({
+    super.key,
+    required this.child,
+  });
 
   static const String name = 'home_screen';
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int currentIndex = 0;
-  late final List<Side> tabs;
-
-  @override
-  void initState() {
-    super.initState();
-
-    tabs = [
-      Side(
-        title: 'Gocarg',
-        body: const HomeView(),
-        
-      ),
-      Side(
-        title: 'Cars',
-        body: const CarsScreen(),
-      ),
-      Side(
-        title: 'Moto Cargas',
-        body: const MotoCarsScreen(),
-      ),
-      Side(
-        title: 'Perfil',
-        body: const MiPerfil(),
-      ),
-    ];
-  }
-
-  @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final location = GoRouterState.of(context).uri.path;
+
+    int currentIndex = 0;
+
+    if (location == AppRoutes.cars) {
+      currentIndex = 1;
+    } else if (location == AppRoutes.motocars) {
+      currentIndex = 2;
+    } else if (location == AppRoutes.perfil) {
+      currentIndex = 3;
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(tabs[currentIndex].title),
-        centerTitle: true,
+        title: Text(appMenuItems[currentIndex].title),
         backgroundColor: colors.primary,
         foregroundColor: colors.onPrimary,
-        actions: tabs[currentIndex].actions,
       ),
-
-      body: IndexedStack(
-        index: currentIndex,
-        children: tabs.map((t) => t.body).toList(),
-      ),
-
+      body: child,
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,
-        backgroundColor: colors.surface,
         onDestinationSelected: (index) {
-          setState(() {
-            currentIndex = index;
-          });
+          switch (index) {
+            case 0:
+              context.go(AppRoutes.home);
+              break;
+            case 1:
+              context.go(AppRoutes.cars);
+              break;
+            case 2:
+              context.go(AppRoutes.motocars);
+              break;
+            case 3:
+              context.go(AppRoutes.perfil);
+              break;
+          }
         },
         destinations: appMenuItems.map((menuItem) {
           return NavigationDestination(

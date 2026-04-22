@@ -20,7 +20,7 @@ final appMenuItems = <MenuItems>[
   ),
   MenuItems(
     title: 'Cars',
-    icon: Icon(Icons.car_rental_rounded),
+    icon: Icon(Icons.airport_shuttle_outlined),
   ),
   MenuItems(
     title: 'MotoCars',

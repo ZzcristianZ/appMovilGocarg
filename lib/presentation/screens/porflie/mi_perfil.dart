@@ -16,7 +16,6 @@ class MiPerfil extends StatelessWidget {
         vertical: size.height * 0.03,
       ),
       children: [
-        // Avatar + info
         Center(
           child: Column(
             children: [
