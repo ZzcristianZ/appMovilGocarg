@@ -1,11 +1,18 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:gocarg/config/router/app_routes.dart';
+
+import 'package:gocarg/presentation/screens/auth/splash/splash_screen.dart';
+import 'package:gocarg/presentation/screens/auth/seleccion_rol/seleccion_rol_screen.dart';
+import 'package:gocarg/presentation/screens/auth/login/login_screen.dart';
+
 import 'package:gocarg/presentation/screens/cliente/shell/cliente_shell.dart';
 import 'package:gocarg/presentation/screens/cliente/home/cliente_home_view.dart';
 import 'package:gocarg/presentation/screens/cliente/historial/cliente_historial_screen.dart';
 import 'package:gocarg/presentation/screens/cliente/perfil/perfil_cliente_screen.dart';
 import 'package:gocarg/presentation/screens/cliente/solicitud/nueva_solicitud_screen.dart';
+
 import 'package:gocarg/presentation/screens/conductor/shell/conductor_shell.dart';
 import 'package:gocarg/presentation/screens/conductor/home/conductor_home_view.dart';
 import 'package:gocarg/presentation/screens/conductor/solicitudes/feed_solicitudes_screen.dart';
@@ -19,12 +26,24 @@ CustomTransitionPage _fade(Widget child) => CustomTransitionPage(
       child: child,
     );
 
-// NOTA: initialLocation apunta directo a '/cliente' de forma temporal.
-// La Fase 1 (splash + selección de rol + login) es la que decide a dónde
-// entra realmente cada usuario.
+// NOTA: initialLocation apunta al splash. De ahí se pasa a selección de
+// rol y login antes de entrar a cualquiera de los dos shells.
 final appRouter = GoRouter(
-  initialLocation: AppRoutes.clienteHome,
+  initialLocation: AppRoutes.splash,
   routes: [
+    GoRoute(
+      path: AppRoutes.splash,
+      pageBuilder: (context, state) => _fade(const SplashScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.seleccionRol,
+      pageBuilder: (context, state) => _fade(const SeleccionRolScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.login,
+      pageBuilder: (context, state) => _fade(const LoginScreen()),
+    ),
+
     // ── Flujo Cliente ────────────────────────────────────────────────────
     ShellRoute(
       builder: (context, state, child) => ClienteShell(key: state.pageKey, child: child),

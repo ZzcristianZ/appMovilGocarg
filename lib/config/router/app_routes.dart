@@ -1,6 +1,11 @@
 class AppRoutes {
   AppRoutes._();
 
+  // Auth compartido
+  static const splash = '/splash';
+  static const seleccionRol = '/seleccion-rol';
+  static const login = '/login';
+
   // Cliente
   static const clienteHome = '/cliente';
   static const clienteHistorial = '/cliente/historial';

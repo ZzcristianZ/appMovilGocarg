@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
-
+/// Paleta de GoCarg.
+///
+/// Construida desde el vocabulario del transporte de carga (ruta, carga,
+/// formalidad) en lugar del azul/morado genérico de plantilla. `carga` y
+/// `rutaVerde` funcionan como acento por rol: el flujo del cliente usa
+/// `carga` (ámbar) para sus acciones, el flujo del conductor usa `rutaVerde`
+/// para las suyas, así cada rol se distingue de un vistazo sin ser dos apps
+/// separadas.
 class AppColors {
   AppColors._();
 
@@ -46,4 +53,13 @@ extension GoCargRoleColor on GoCargRole {
   Color get acentoSuave => this == GoCargRole.cliente
       ? AppColors.cargaSuave
       : AppColors.rutaVerdeSuave;
+
+  /// Color de texto/ícono legible sobre [acentoSuave] (fondo claro).
+  Color get acentoTexto => this == GoCargRole.cliente
+      ? AppColors.rutaOscuro
+      : const Color(0xFF163A2B);
+
+  /// Color de texto/ícono legible sobre [acento] (fondo saturado).
+  Color get onAcento =>
+      this == GoCargRole.cliente ? AppColors.rutaOscuro : Colors.white;
 }
