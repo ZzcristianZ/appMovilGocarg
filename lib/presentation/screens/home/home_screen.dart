@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -20,8 +22,9 @@ class HomeScreen extends StatelessWidget {
     final location = GoRouterState.of(context).uri.path;
 
     int currentIndex = 0;
-    if (location == AppRoutes.cars) currentIndex = 1;
-    else if (location == AppRoutes.motocars) currentIndex = 2;
+    if (location == AppRoutes.cars) {
+      currentIndex = 1;
+    } else if (location == AppRoutes.motocars) currentIndex = 2;
     else if (location == AppRoutes.perfil) currentIndex = 3;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(

@@ -3,14 +3,10 @@ import 'package:gocarg/config/theme/app_theme.dart';
 
 class ThemeNotifier extends Notifier<AppTheme> {
   @override
-  AppTheme build() => AppTheme();
+  AppTheme build() => const AppTheme();
 
   void toggleDarkMode() {
     state = state.copyWith(isDarkMode: !state.isDarkMode);
-  }
-
-  void changeColor(int colorIndex) {
-    state = state.copyWith(selectedColor: colorIndex);
   }
 }
 
