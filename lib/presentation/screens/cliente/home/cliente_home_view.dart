@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gocarg/config/router/app_routes.dart';
 
-class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+class ClienteHomeView extends StatelessWidget {
+  const ClienteHomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -239,7 +239,7 @@ class _ServicesRow extends StatelessWidget {
         'Hasta 5 ton',
         colors.primaryContainer,
         colors.onPrimaryContainer,
-        AppRoutes.cars,
+        AppRoutes.clienteNuevaSolicitud,
       ),
       (
         Icons.motorcycle_rounded,
@@ -247,7 +247,7 @@ class _ServicesRow extends StatelessWidget {
         'Hasta 200 kg',
         colors.secondaryContainer,
         colors.onSecondaryContainer,
-        AppRoutes.motocars,
+        AppRoutes.clienteNuevaSolicitud,
       ),
     ];
 
@@ -263,7 +263,7 @@ class _ServicesRow extends StatelessWidget {
               subtitle: sub,
               bg: bg,
               fg: fg,
-              onTap: () => context.go(route),
+              onTap: () => context.push(route),
             ),
           ),
         );

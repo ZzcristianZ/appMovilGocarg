@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MiPerfil extends StatelessWidget {
-  const MiPerfil({super.key});
+class PerfilClienteScreen extends StatelessWidget {
+  const PerfilClienteScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
