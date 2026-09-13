@@ -1,10 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:gocarg/config/router/app_routes.dart';
-import 'package:gocarg/config/theme/app_colors.dart';
+import '../../../../config/router/routing.dart';
+import '../../../../config/theme/theme.dart';
+
+
 
 /// Pantalla de carga inicial. Muestra la marca ~1.6s y pasa sola a la
 /// selección de rol — no requiere nada del usuario.

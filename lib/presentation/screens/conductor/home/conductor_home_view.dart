@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:gocarg/presentation/widgets/proximamente_view.dart';
-
+import '../../../widgets/widgets.dart';
 /// Dashboard del conductor: toggle disponible/no disponible + resumen del
 /// día. Contenido real se construye en la Fase 4.
 class ConductorHomeView extends StatelessWidget {

@@ -1,23 +1,9 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import 'package:gocarg/config/router/app_routes.dart';
-
-import 'package:gocarg/presentation/screens/auth/splash/splash_screen.dart';
-import 'package:gocarg/presentation/screens/auth/seleccion_rol/seleccion_rol_screen.dart';
-import 'package:gocarg/presentation/screens/auth/login/login_screen.dart';
-
-import 'package:gocarg/presentation/screens/cliente/shell/cliente_shell.dart';
-import 'package:gocarg/presentation/screens/cliente/home/cliente_home_view.dart';
-import 'package:gocarg/presentation/screens/cliente/historial/cliente_historial_screen.dart';
-import 'package:gocarg/presentation/screens/cliente/perfil/perfil_cliente_screen.dart';
-import 'package:gocarg/presentation/screens/cliente/solicitud/nueva_solicitud_screen.dart';
-
-import 'package:gocarg/presentation/screens/conductor/shell/conductor_shell.dart';
-import 'package:gocarg/presentation/screens/conductor/home/conductor_home_view.dart';
-import 'package:gocarg/presentation/screens/conductor/solicitudes/feed_solicitudes_screen.dart';
-import 'package:gocarg/presentation/screens/conductor/historial/conductor_historial_screen.dart';
-import 'package:gocarg/presentation/screens/conductor/perfil/perfil_conductor_screen.dart';
+import '../../presentation/screens/auth/auth.dart';
+import '../../presentation/screens/cliente/cliente.dart';
+import '../../presentation/screens/conductor/conductor.dart';
+import 'routing.dart';
 
 CustomTransitionPage _fade(Widget child) => CustomTransitionPage(
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -65,6 +51,26 @@ final appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.clienteNuevaSolicitud,
       pageBuilder: (context, state) => _fade(const NuevaSolicitudScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.clienteSelectorUbicacion,
+      pageBuilder: (context, state) => _fade(const SelectorUbicacionScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.clienteResultados,
+      pageBuilder: (context, state) => _fade(const ResultadosConductoresScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.clienteDetalleConductor,
+      pageBuilder: (context, state) => _fade(const DetalleConductorScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.clienteConfirmacion,
+      pageBuilder: (context, state) => _fade(const ConfirmacionSolicitudScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.clienteSeguimiento,
+      pageBuilder: (context, state) => _fade(const SeguimientoScreen()),
     ),
 
     // ── Flujo Conductor ──────────────────────────────────────────────────

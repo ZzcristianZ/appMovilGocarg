@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gocarg/config/theme/app_typography.dart';
-import 'app_colors.dart';
+import 'package:gocarg/config/theme/theme.dart';
 
 class AppTheme {
   final bool isDarkMode;

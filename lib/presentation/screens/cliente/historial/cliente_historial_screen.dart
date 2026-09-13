@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:gocarg/presentation/widgets/proximamente_view.dart';
+import '../../../widgets/widgets.dart';
+
+
 
 /// Historial de solicitudes/viajes del cliente.
 /// Contenido real se construye en la Fase 3 del plan de diseño.

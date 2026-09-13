@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gocarg/config/theme/app_theme.dart';
+
+import '../../config/theme/theme.dart';
+
 
 class ThemeNotifier extends Notifier<AppTheme> {
   @override

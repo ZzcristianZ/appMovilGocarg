@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:gocarg/presentation/widgets/proximamente_view.dart';
+import '../../../widgets/widgets.dart';
+
 
 /// Historial de servicios realizados por el conductor.
 /// Contenido real se construye en la Fase 5.

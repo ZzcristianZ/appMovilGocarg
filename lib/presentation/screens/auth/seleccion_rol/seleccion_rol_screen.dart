@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:gocarg/config/router/app_routes.dart';
-import 'package:gocarg/config/theme/app_colors.dart';
-import 'package:gocarg/presentation/providers/role_provider.dart';
+
+import '../../../../config/theme/theme.dart';
+import '../../../providers/providers.dart';
+
 
 /// Bifurca hacia el flujo Cliente o el flujo Conductor. Es la puerta única
 /// antes de Login — Login ya sabe con qué acento y hacia dónde entrar.

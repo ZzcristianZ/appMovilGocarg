@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:gocarg/presentation/widgets/proximamente_view.dart';
+import '../../../widgets/widgets.dart';
+
 
 /// Feed de solicitudes de flete disponibles cerca del conductor.
 /// Contenido real se construye en la Fase 4.

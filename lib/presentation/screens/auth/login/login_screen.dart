@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:gocarg/config/router/app_routes.dart';
-import 'package:gocarg/config/theme/app_colors.dart';
-import 'package:gocarg/presentation/providers/role_provider.dart';
+import '../../../../config/router/routing.dart';
+import '../../../../config/theme/theme.dart';
+import '../../../providers/providers.dart';
+
+
+
+
 
 /// Login. El rol ya viene elegido desde la pantalla anterior — aquí solo
 /// se refleja (chip + acento) y se decide a qué shell entrar al confirmar.

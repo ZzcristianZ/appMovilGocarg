@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:gocarg/config/router/app_routes.dart';
-import 'package:gocarg/config/theme/app_colors.dart';
-import 'package:gocarg/presentation/widgets/gocarg_app_bar.dart';
-import 'package:gocarg/presentation/widgets/gocarg_bottom_nav.dart';
+import '../../../../config/router/routing.dart';
+import '../../../../config/theme/theme.dart';
+import '../../../widgets/widgets.dart';
+
+
 
 /// Shell del flujo Cliente: Inicio, Historial y Perfil.
 /// "Solicitar" no es una pestaña — vive dentro de Inicio como la acción

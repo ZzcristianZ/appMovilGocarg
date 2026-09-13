@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:gocarg/presentation/widgets/proximamente_view.dart';
+import '../../../widgets/widgets.dart';
 
 /// Perfil del conductor: datos personales, vehículo(s) y documentos de
 /// verificación. Es una pantalla distinta a la del cliente porque necesita
