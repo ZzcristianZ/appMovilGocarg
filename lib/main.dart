@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gocarg/config/router/router.dart';
-import 'package:gocarg/presentation/providers/theme_provider.dart';
+
+import 'presentation/providers/providers.dart';
+
 
 void main() {
   runApp(
