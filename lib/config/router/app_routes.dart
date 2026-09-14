@@ -12,7 +12,7 @@ class AppRoutes {
   static const clientePerfil = '/cliente/perfil';
   static const clienteNuevaSolicitud = '/cliente/solicitud/nueva';
   static const clienteSelectorUbicacion = '/cliente/solicitud/ubicacion';
-  static const clienteResultados = '/cliente/solicitud/resultados';
+  static const clienteDisponibilidad = '/cliente/solicitud/disponibilidad';
   static const clienteDetalleConductor = '/cliente/solicitud/conductor';
   static const clienteConfirmacion = '/cliente/solicitud/confirmacion';
   static const clienteSeguimiento = '/cliente/solicitud/seguimiento';

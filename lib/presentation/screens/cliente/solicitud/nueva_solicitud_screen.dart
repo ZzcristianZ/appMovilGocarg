@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../config/router/routing.dart';
-import '../../../../config/theme/theme.dart';
-import '../../../providers/providers.dart';
-import '../cliente.dart';
+import 'package:gocarg/config/router/app_routes.dart';
+import 'package:gocarg/config/theme/app_colors.dart';
+import 'package:gocarg/config/theme/app_typography.dart';
+import 'package:gocarg/presentation/providers/solicitud_provider.dart';
+import 'package:gocarg/presentation/screens/cliente/solicitud/conductor_disponible.dart';
+import 'package:gocarg/presentation/screens/cliente/solicitud/solicitud_flete.dart';
 
-/// Formulario para publicar una solicitud de flete: origen, destino, tipo
-/// de vehículo, tipo de carga, peso aproximado y fecha/hora.
+/// Formulario para crear la solicitud: el conductor ya viene elegido
+/// desde Disponibilidad (llega por `extra`). Aquí solo se define origen,
+/// destino, tipo de carga, peso aproximado y fecha/hora.
 class NuevaSolicitudScreen extends ConsumerStatefulWidget {
   const NuevaSolicitudScreen({super.key});
 
@@ -19,7 +22,6 @@ class NuevaSolicitudScreen extends ConsumerStatefulWidget {
 class _NuevaSolicitudScreenState extends ConsumerState<NuevaSolicitudScreen> {
   String? _origen;
   String? _destino;
-  String _tipoVehiculo = 'Camión de carga';
   String _tipoCarga = 'General';
   DateTime? _fecha;
   TimeOfDay? _hora;
@@ -35,7 +37,7 @@ class _NuevaSolicitudScreenState extends ConsumerState<NuevaSolicitudScreen> {
     'Mudanza / muebles',
   ];
 
-  bool get _puedeBuscar => _origen != null && _destino != null;
+  bool get _puedeContinuar => _origen != null && _destino != null;
 
   @override
   void dispose() {
@@ -60,24 +62,71 @@ class _NuevaSolicitudScreenState extends ConsumerState<NuevaSolicitudScreen> {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 60)),
     );
-    if (fecha != null) setState(() => _fecha = fecha);
+    if (fecha != null) {
+      setState(() => _fecha = fecha);
+    }
   }
 
   Future<void> _elegirHora() async {
     final hora = await showTimePicker(context: context, initialTime: TimeOfDay.now());
-    if (hora != null) setState(() => _hora = hora);
+    if (hora != null) {
+      setState(() => _hora = hora);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final conductor = GoRouterState.of(context).extra as ConductorDisponible?;
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+
+    if (conductor == null) {
+      return const Scaffold(body: Center(child: Text('Elige un conductor primero')));
+    }
 
     return Scaffold(
       appBar: AppBar(title: const Text('Nueva solicitud')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
         children: [
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: AppColors.cargaSuave,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: colors.surface,
+                  child: Text(
+                    conductor.iniciales,
+                    style: const TextStyle(color: AppColors.rutaOscuro, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(conductor.nombre, style: textTheme.titleMedium),
+                      Text(
+                        '${conductor.tipo.nombre} · ${conductor.placa}',
+                        style: textTheme.bodyMedium?.copyWith(color: AppColors.rutaOscuro),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => context.pop(),
+                  child: const Text('Cambiar'),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
           Text('¿Qué vas a mover?', style: textTheme.titleLarge),
           const SizedBox(height: 16),
 
@@ -95,31 +144,6 @@ class _NuevaSolicitudScreenState extends ConsumerState<NuevaSolicitudScreen> {
             etiqueta: 'Destino',
             valor: _destino,
             onTap: () => _elegirUbicacion(esOrigen: false),
-          ),
-
-          const SizedBox(height: 24),
-          Text('Tipo de vehículo', style: textTheme.titleMedium),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: _TipoVehiculoCard(
-                  icono: Icons.airport_shuttle_rounded,
-                  titulo: 'Camión\nde carga',
-                  seleccionado: _tipoVehiculo == 'Camión de carga',
-                  onTap: () => setState(() => _tipoVehiculo = 'Camión de carga'),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _TipoVehiculoCard(
-                  icono: Icons.motorcycle_rounded,
-                  titulo: 'Moto\ncarga',
-                  seleccionado: _tipoVehiculo == 'Moto carga',
-                  onTap: () => setState(() => _tipoVehiculo = 'Moto carga'),
-                ),
-              ),
-            ],
           ),
 
           const SizedBox(height: 24),
@@ -185,23 +209,23 @@ class _NuevaSolicitudScreenState extends ConsumerState<NuevaSolicitudScreen> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: _puedeBuscar
+              onPressed: _puedeContinuar
                   ? () {
                       ref.read(solicitudEnProgresoProvider.notifier).guardar(
                             SolicitudFlete(
+                              conductor: conductor,
                               origen: _origen!,
                               destino: _destino!,
-                              tipoVehiculo: _tipoVehiculo,
                               tipoCarga: _tipoCarga,
                               peso: _pesoController.text,
                               fecha: _fecha,
                               hora: _hora,
                             ),
                           );
-                      context.push(AppRoutes.clienteResultados);
+                      context.push(AppRoutes.clienteConfirmacion);
                     }
                   : null,
-              child: const Text('Buscar conductores disponibles'),
+              child: const Text('Continuar'),
             ),
           ),
         ],
@@ -263,55 +287,6 @@ class _CampoUbicacion extends StatelessWidget {
                 ),
               ),
               Icon(Icons.chevron_right_rounded, color: colors.outline),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _TipoVehiculoCard extends StatelessWidget {
-  final IconData icono;
-  final String titulo;
-  final bool seleccionado;
-  final VoidCallback onTap;
-
-  const _TipoVehiculoCard({
-    required this.icono,
-    required this.titulo,
-    required this.seleccionado,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-
-    return Material(
-      color: seleccionado ? AppColors.cargaSuave : colors.surface,
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: seleccionado ? AppColors.carga : colors.outline),
-          ),
-          child: Column(
-            children: [
-              Icon(icono, color: seleccionado ? AppColors.rutaOscuro : colors.onSurfaceVariant),
-              const SizedBox(height: 6),
-              Text(
-                titulo,
-                textAlign: TextAlign.center,
-                style: textTheme.labelLarge?.copyWith(
-                  color: seleccionado ? AppColors.rutaOscuro : colors.onSurfaceVariant,
-                ),
-              ),
             ],
           ),
         ),

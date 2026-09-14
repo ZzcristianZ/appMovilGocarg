@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gocarg/config/router/app_routes.dart';
+import 'package:gocarg/config/theme/theme.dart';
 
-import '../../../../config/router/routing.dart';
-import '../../../../config/theme/theme.dart';
-import '../../../widgets/widgets.dart';
+import 'package:gocarg/presentation/widgets/widgets.dart';
+
+
 
 
 /// Shell del flujo Conductor: Inicio, Solicitudes, Historial y Perfil.

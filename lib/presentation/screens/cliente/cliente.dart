@@ -1,5 +1,11 @@
-export 'shell/cliente_shell.dart';
-export 'home/cliente_home_view.dart';
-export 'historial/cliente_historial_screen.dart';
-export 'perfil/perfil_cliente_screen.dart';
-export 'solicitud/solicitud.dart';
+
+export 'package:gocarg/presentation/screens/cliente/shell/cliente_shell.dart';
+export 'package:gocarg/presentation/screens/cliente/home/cliente_home_view.dart';
+export 'package:gocarg/presentation/screens/cliente/historial/cliente_historial_screen.dart';
+export 'package:gocarg/presentation/screens/cliente/perfil/perfil_cliente_screen.dart';
+export 'package:gocarg/presentation/screens/cliente/solicitud/nueva_solicitud_screen.dart';
+export 'package:gocarg/presentation/screens/cliente/solicitud/selector_ubicacion_screen.dart';
+export 'package:gocarg/presentation/screens/cliente/solicitud/disponibilidad_screen.dart';
+export 'package:gocarg/presentation/screens/cliente/solicitud/detalle_conductor_screen.dart';
+export 'package:gocarg/presentation/screens/cliente/solicitud/confirmacion_solicitud_screen.dart';
+export 'package:gocarg/presentation/screens/cliente/solicitud/seguimiento_screen.dart';

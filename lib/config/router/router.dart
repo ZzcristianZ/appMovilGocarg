@@ -1,9 +1,16 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import '../../presentation/screens/auth/auth.dart';
-import '../../presentation/screens/cliente/cliente.dart';
-import '../../presentation/screens/conductor/conductor.dart';
-import 'routing.dart';
+
+import 'package:gocarg/config/router/app_routes.dart';
+import 'package:gocarg/presentation/screens/auth/auth.dart';
+import 'package:gocarg/presentation/screens/cliente/cliente.dart';
+import 'package:gocarg/presentation/screens/conductor/conductor.dart';
+
+
+
+
+
+
 
 CustomTransitionPage _fade(Widget child) => CustomTransitionPage(
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -57,8 +64,8 @@ final appRouter = GoRouter(
       pageBuilder: (context, state) => _fade(const SelectorUbicacionScreen()),
     ),
     GoRoute(
-      path: AppRoutes.clienteResultados,
-      pageBuilder: (context, state) => _fade(const ResultadosConductoresScreen()),
+      path: AppRoutes.clienteDisponibilidad,
+      pageBuilder: (context, state) => _fade(const DisponibilidadScreen()),
     ),
     GoRoute(
       path: AppRoutes.clienteDetalleConductor,

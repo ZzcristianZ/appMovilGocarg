@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../config/router/routing.dart';
-
+import 'package:gocarg/config/router/app_routes.dart';
+import 'package:gocarg/presentation/screens/cliente/solicitud/tipo_vehiculo.dart';
 
 class ClienteHomeView extends StatelessWidget {
   const ClienteHomeView({super.key});
@@ -241,7 +240,7 @@ class _ServicesRow extends StatelessWidget {
         'Hasta 5 ton',
         colors.primaryContainer,
         colors.onPrimaryContainer,
-        AppRoutes.clienteNuevaSolicitud,
+        TipoVehiculo.camion,
       ),
       (
         Icons.motorcycle_rounded,
@@ -249,13 +248,13 @@ class _ServicesRow extends StatelessWidget {
         'Hasta 200 kg',
         colors.secondaryContainer,
         colors.onSecondaryContainer,
-        AppRoutes.clienteNuevaSolicitud,
+        TipoVehiculo.moto,
       ),
     ];
 
     return Row(
       children: services.map((s) {
-        final (icon, label, sub, bg, fg, route) = s;
+        final (icon, label, sub, bg, fg, tipo) = s;
         return Expanded(
           child: Padding(
             padding: const EdgeInsets.only(right: 10),
@@ -265,7 +264,7 @@ class _ServicesRow extends StatelessWidget {
               subtitle: sub,
               bg: bg,
               fg: fg,
-              onTap: () => context.push(route),
+              onTap: () => context.push(AppRoutes.clienteDisponibilidad, extra: tipo),
             ),
           ),
         );

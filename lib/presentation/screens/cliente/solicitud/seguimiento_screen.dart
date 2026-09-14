@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gocarg/config/router/app_routes.dart';
+import 'package:gocarg/presentation/widgets/widgets.dart';
 
-import '../../../../config/router/routing.dart';
-import '../../../widgets/widgets.dart';
 
 /// Seguimiento en tiempo real del servicio (mapa + estado del viaje).
 /// Contenido real se construye en la Fase 3.

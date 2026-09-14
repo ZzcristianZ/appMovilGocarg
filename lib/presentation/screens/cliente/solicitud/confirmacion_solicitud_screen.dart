@@ -2,30 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../config/router/routing.dart';
-import '../../../../config/theme/theme.dart';
-import '../../../providers/providers.dart';
-import '../../../widgets/widgets.dart';
-import '../cliente.dart';
-
-
+import 'package:gocarg/config/router/app_routes.dart';
+import 'package:gocarg/config/theme/app_colors.dart';
+import 'package:gocarg/config/theme/app_typography.dart';
+import 'package:gocarg/presentation/providers/solicitud_provider.dart';
+import 'package:gocarg/presentation/widgets/route_ticket_card.dart';
 
 /// Último paso antes de enviar la solicitud: resumen de ruta + conductor
-/// elegido + tarifa total. Al confirmar, limpia la solicitud en progreso
-/// y entra a Seguimiento (contenido real en la Fase 3).
+/// elegido + tarifa. Al confirmar, limpia la solicitud en progreso y
+/// entra a Seguimiento (contenido real en la Fase 3).
 class ConfirmacionSolicitudScreen extends ConsumerWidget {
   const ConfirmacionSolicitudScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final conductor = GoRouterState.of(context).extra as ConductorDisponible?;
     final solicitud = ref.watch(solicitudEnProgresoProvider);
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    if (conductor == null || solicitud == null) {
+    if (solicitud == null) {
       return const Scaffold(body: Center(child: Text('Falta información de la solicitud')));
     }
+
+    final conductor = solicitud.conductor;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Confirmar solicitud')),
@@ -43,7 +42,7 @@ class ConfirmacionSolicitudScreen extends ConsumerWidget {
             origen: solicitud.origen,
             destino: solicitud.destino,
             chips: [
-              Chip(label: Text(solicitud.tipoVehiculo), side: BorderSide(color: colors.outline)),
+              Chip(label: Text(conductor.tipo.nombre), side: BorderSide(color: colors.outline)),
               Chip(label: Text(solicitud.tipoCarga), side: BorderSide(color: colors.outline)),
               if (solicitud.peso.isNotEmpty)
                 Chip(label: Text('${solicitud.peso} kg'), side: BorderSide(color: colors.outline)),
@@ -65,13 +64,13 @@ class ConfirmacionSolicitudScreen extends ConsumerWidget {
                     children: [
                       Text(conductor.nombre, style: textTheme.bodyLarge),
                       Text(
-                        '${conductor.vehiculo} · ${conductor.placa}',
+                        '${conductor.tipo.nombre} · ${conductor.placa}',
                         style: textTheme.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
                       ),
                     ],
                   ),
                 ),
-                Text('\$${conductor.tarifa}', style: AppTypography.dato(fontSize: 16)),
+                Text('\$${conductor.tarifaReferencia}', style: AppTypography.dato(fontSize: 16)),
               ],
             ),
           ),

@@ -1,34 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../config/router/routing.dart';
-import '../../../../config/theme/theme.dart';
-import '../../../providers/providers.dart';
-import '../../../widgets/widgets.dart';
-import '../cliente.dart';
+import 'package:gocarg/config/router/app_routes.dart';
+import 'package:gocarg/config/theme/app_colors.dart';
+import 'package:gocarg/config/theme/app_typography.dart';
+import 'package:gocarg/presentation/screens/cliente/solicitud/conductor_disponible.dart';
 
-
-
-/// Detalle del conductor/vehículo elegido en Resultados. El conductor
-/// llega por `extra`; la ruta se lee del provider de la solicitud en
-/// progreso.
-class DetalleConductorScreen extends ConsumerWidget {
+/// Detalle del conductor/vehículo elegido en Disponibilidad. Al confirmar,
+/// se pasa a crear la solicitud (origen, destino, carga) con este
+/// conductor ya asignado.
+class DetalleConductorScreen extends StatelessWidget {
   const DetalleConductorScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final conductor = GoRouterState.of(context).extra as ConductorDisponible?;
-    final solicitud = ref.watch(solicitudEnProgresoProvider);
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     if (conductor == null) {
       return const Scaffold(body: Center(child: Text('No se encontró el conductor')));
     }
-
-    final distanciaTarifa = (conductor.tarifa * 0.7).round();
-    final servicioTarifa = conductor.tarifa - distanciaTarifa;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Detalle del conductor')),
@@ -81,33 +73,21 @@ class DetalleConductorScreen extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                Icon(
-                  conductor.vehiculo == 'Moto carga' ? Icons.motorcycle_rounded : Icons.airport_shuttle_rounded,
-                  color: colors.onSurfaceVariant,
-                ),
+                Icon(conductor.tipo.icono, color: colors.onSurfaceVariant),
                 const SizedBox(width: 12),
-                Expanded(child: Text(conductor.vehiculo, style: textTheme.bodyLarge)),
+                Expanded(child: Text(conductor.tipo.nombre, style: textTheme.bodyLarge)),
                 Text(conductor.placa, style: AppTypography.dato(fontSize: 14)),
               ],
             ),
           ),
 
-          if (solicitud != null) ...[
-            const SizedBox(height: 24),
-            Text('Tu ruta', style: textTheme.titleMedium),
-            const SizedBox(height: 10),
-            RouteTicketCard(
-              origen: solicitud.origen,
-              destino: solicitud.destino,
-              chips: [
-                Chip(label: Text(solicitud.tipoVehiculo), side: BorderSide(color: colors.outline)),
-                Chip(label: Text(solicitud.tipoCarga), side: BorderSide(color: colors.outline)),
-              ],
-            ),
-          ],
-
           const SizedBox(height: 24),
-          Text('Tarifa estimada', style: textTheme.titleMedium),
+          Text('Tarifa de referencia', style: textTheme.titleMedium),
+          const SizedBox(height: 6),
+          Text(
+            'El total final se calcula al confirmar la solicitud, según origen y destino.',
+            style: textTheme.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
+          ),
           const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.all(16),
@@ -115,16 +95,12 @@ class DetalleConductorScreen extends ConsumerWidget {
               border: Border.all(color: colors.outline),
               borderRadius: BorderRadius.circular(14),
             ),
-            child: Column(
+            child: Row(
               children: [
-                _FilaTarifa(etiqueta: 'Servicio base', valor: servicioTarifa),
-                const SizedBox(height: 8),
-                _FilaTarifa(etiqueta: 'Distancia (${conductor.distanciaKm} km)', valor: distanciaTarifa),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Divider(height: 1),
-                ),
-                _FilaTarifa(etiqueta: 'Total', valor: conductor.tarifa, destacado: true),
+                Icon(Icons.sell_outlined, color: colors.onSurfaceVariant),
+                const SizedBox(width: 12),
+                Expanded(child: Text('Desde', style: textTheme.bodyLarge)),
+                Text('\$${conductor.tarifaReferencia}', style: AppTypography.dato(fontSize: 18)),
               ],
             ),
           ),
@@ -133,40 +109,12 @@ class DetalleConductorScreen extends ConsumerWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => context.push(AppRoutes.clienteConfirmacion, extra: conductor),
-              child: const Text('Solicitar a este conductor'),
+              onPressed: () => context.push(AppRoutes.clienteNuevaSolicitud, extra: conductor),
+              child: const Text('Elegir este conductor y continuar'),
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class _FilaTarifa extends StatelessWidget {
-  final String etiqueta;
-  final int valor;
-  final bool destacado;
-
-  const _FilaTarifa({required this.etiqueta, required this.valor, this.destacado = false});
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            etiqueta,
-            style: destacado ? textTheme.titleMedium : textTheme.bodyMedium,
-          ),
-        ),
-        Text(
-          '\$$valor',
-          style: AppTypography.dato(fontSize: destacado ? 18 : 14),
-        ),
-      ],
     );
   }
 }
