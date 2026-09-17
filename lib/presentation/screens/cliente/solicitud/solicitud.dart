@@ -7,3 +7,5 @@ export 'selector_ubicacion_screen.dart';
 export 'detalle_conductor_screen.dart';
 export 'confirmacion_solicitud_screen.dart';
 export 'seguimiento_screen.dart';
+export 'chat_conductor_screen.dart';
+export 'calificar_servicio_screen.dart';

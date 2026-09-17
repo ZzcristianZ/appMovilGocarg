@@ -1,11 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class PerfilClienteScreen extends StatelessWidget {
+import 'package:gocarg/config/router/app_routes.dart';
+import 'package:gocarg/presentation/providers/providers.dart';
+import 'package:gocarg/presentation/widgets/widgets.dart';
+
+import '../historial/viaje_historial.dart';
+
+void _abrirProximamente(BuildContext context, {required IconData icon, required String titulo}) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => Scaffold(
+        appBar: AppBar(title: Text(titulo)),
+        body: ProximamenteView(
+          icon: icon,
+          mensaje: 'Esta sección estará disponible más adelante.',
+        ),
+      ),
+    ),
+  );
+}
+
+class PerfilClienteScreen extends ConsumerWidget {
   const PerfilClienteScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
+    final modoOscuro = ref.watch(themeProvider).isDarkMode;
+
+    final serviciosCompletados =
+        historialMock.where((v) => v.estado == EstadoViaje.completado).length;
+    final calificacionesDadas =
+        historialMock.map((v) => v.calificacionDada).whereType<double>().toList();
+    final calificacionPromedio = calificacionesDadas.isEmpty
+        ? '—'
+        : (calificacionesDadas.reduce((a, b) => a + b) / calificacionesDadas.length)
+            .toStringAsFixed(1);
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -17,7 +49,14 @@ class PerfilClienteScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _UserStats(colors: colors),
+                _UserStats(
+                  colors: colors,
+                  stats: [
+                    ('$serviciosCompletados', 'Servicios'),
+                    (calificacionPromedio, 'Calificación'),
+                    ('3', 'Meses'),
+                  ],
+                ),
                 const SizedBox(height: 28),
 
                 _SectionLabel(label: 'MI CUENTA'),
@@ -30,18 +69,24 @@ class PerfilClienteScreen extends StatelessWidget {
                       title: 'Editar perfil',
                       subtitle: 'Nombre, foto, contacto',
                       color: colors.primary,
+                      onTap: () => _abrirProximamente(context,
+                          icon: Icons.person_outline_rounded, titulo: 'Editar perfil'),
                     ),
                     _OptionItem(
                       icon: Icons.lock_outline_rounded,
                       title: 'Seguridad',
                       subtitle: 'Contraseña y verificación',
                       color: colors.secondary,
+                      onTap: () => _abrirProximamente(context,
+                          icon: Icons.lock_outline_rounded, titulo: 'Seguridad'),
                     ),
                     _OptionItem(
                       icon: Icons.notifications_none_rounded,
                       title: 'Notificaciones',
                       subtitle: 'Alertas y avisos',
                       color: colors.tertiary,
+                      onTap: () => _abrirProximamente(context,
+                          icon: Icons.notifications_none_rounded, titulo: 'Notificaciones'),
                     ),
                   ],
                 ),
@@ -56,8 +101,13 @@ class PerfilClienteScreen extends StatelessWidget {
                     _OptionItem(
                       icon: Icons.palette_outlined,
                       title: 'Apariencia',
-                      subtitle: 'Tema y colores',
+                      subtitle: modoOscuro ? 'Modo oscuro' : 'Modo claro',
                       color: const Color(0xFFA78BFA),
+                      onTap: () => ref.read(themeProvider.notifier).toggleDarkMode(),
+                      trailing: Switch(
+                        value: modoOscuro,
+                        onChanged: (_) => ref.read(themeProvider.notifier).toggleDarkMode(),
+                      ),
                     ),
                     _OptionItem(
                       icon: Icons.language_rounded,
@@ -65,6 +115,8 @@ class PerfilClienteScreen extends StatelessWidget {
                       subtitle: 'Español',
                       color: const Color(0xFF34D399),
                       trailing: _Badge(label: 'ES', colors: colors),
+                      onTap: () => _abrirProximamente(context,
+                          icon: Icons.language_rounded, titulo: 'Idioma'),
                     ),
                   ],
                 ),
@@ -81,18 +133,25 @@ class PerfilClienteScreen extends StatelessWidget {
                       title: 'Centro de ayuda',
                       subtitle: 'Preguntas frecuentes',
                       color: const Color(0xFFFBBF24),
+                      onTap: () => _abrirProximamente(context,
+                          icon: Icons.help_outline_rounded, titulo: 'Centro de ayuda'),
                     ),
                     _OptionItem(
                       icon: Icons.info_outline_rounded,
                       title: 'Acerca de Gocarg',
                       subtitle: 'Versión 1.0.0',
-                      color: colors.outline,
+                      color: colors.onSurfaceVariant,
+                      onTap: () => _abrirProximamente(context,
+                          icon: Icons.info_outline_rounded, titulo: 'Acerca de Gocarg'),
                     ),
                   ],
                 ),
 
                 const SizedBox(height: 28),
-                _LogoutButton(colors: colors),
+                _LogoutButton(
+                  colors: colors,
+                  onPressed: () => context.go(AppRoutes.seleccionRol),
+                ),
               ],
             ),
           ),
@@ -198,12 +257,11 @@ class _ProfileHeader extends StatelessWidget {
 
 class _UserStats extends StatelessWidget {
   final ColorScheme colors;
-  const _UserStats({required this.colors});
+  final List<(String, String)> stats;
+  const _UserStats({required this.colors, required this.stats});
 
   @override
   Widget build(BuildContext context) {
-    const stats = [('24', 'Servicios'), ('4.9 ★', 'Calificación'), ('3', 'Meses')];
-
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
@@ -235,7 +293,7 @@ class _UserStats extends StatelessWidget {
                   const SizedBox(height: 3),
                   Text(label,
                       style: TextStyle(
-                          fontSize: 11, color: colors.outline)),
+                          fontSize: 11, color: colors.onSurfaceVariant)),
                 ],
               ),
             ),
@@ -260,7 +318,7 @@ class _SectionLabel extends StatelessWidget {
       style: TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w800,
-          color: colors.outline,
+          color: colors.onSurfaceVariant,
           letterSpacing: 1.5),
     );
   }
@@ -273,6 +331,7 @@ class _OptionItem {
   final String title;
   final String subtitle;
   final Color color;
+  final VoidCallback onTap;
   final Widget? trailing;
 
   const _OptionItem({
@@ -280,6 +339,7 @@ class _OptionItem {
     required this.title,
     required this.subtitle,
     required this.color,
+    required this.onTap,
     this.trailing,
   });
 }
@@ -327,7 +387,7 @@ class _OptionsGroup extends StatelessWidget {
             return Column(
               children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: opt.onTap,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 14),
@@ -347,19 +407,20 @@ class _OptionsGroup extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(opt.title,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      fontSize: 14)),
+                                      fontSize: 14,
+                                      color: colors.onSurface)),
                               Text(opt.subtitle,
                                   style: TextStyle(
                                       fontSize: 11,
-                                      color: colors.outline)),
+                                      color: colors.onSurfaceVariant)),
                             ],
                           ),
                         ),
                         opt.trailing ??
                             Icon(Icons.arrow_forward_ios_rounded,
-                                size: 14, color: colors.outline),
+                                size: 14, color: colors.onSurfaceVariant),
                       ],
                     ),
                   ),
@@ -383,14 +444,15 @@ class _OptionsGroup extends StatelessWidget {
 
 class _LogoutButton extends StatelessWidget {
   final ColorScheme colors;
-  const _LogoutButton({required this.colors});
+  final VoidCallback onPressed;
+  const _LogoutButton({required this.colors, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: OutlinedButton.icon(
-        onPressed: () {},
+        onPressed: onPressed,
         icon: Icon(Icons.logout_rounded, color: colors.error),
         label: Text('Cerrar sesión',
             style: TextStyle(

@@ -125,7 +125,7 @@ class _ConductorCard extends StatelessWidget {
                       children: [
                         const Icon(Icons.star_rounded, size: 15, color: AppColors.carga),
                         const SizedBox(width: 2),
-                        Text('${conductor.calificacion}', style: AppTypography.dato(fontSize: 12)),
+                        Text('${conductor.calificacion}', style: AppTypography.dato(fontSize: 12, color: colors.onSurface)),
                         const SizedBox(width: 6),
                         Expanded(
                           child: Text(
@@ -145,17 +145,7 @@ class _ConductorCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    '\$${conductor.tarifaReferencia}',
-                    style: AppTypography.dato(fontSize: 16, color: AppColors.rutaOscuro),
-                  ),
-                  const SizedBox(height: 4),
-                  Icon(Icons.chevron_right_rounded, color: colors.outline),
-                ],
-              ),
+              Icon(Icons.chevron_right_rounded, color: colors.outline),
             ],
           ),
         ),

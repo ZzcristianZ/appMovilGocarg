@@ -79,6 +79,18 @@ final appRouter = GoRouter(
       path: AppRoutes.clienteSeguimiento,
       pageBuilder: (context, state) => _fade(const SeguimientoScreen()),
     ),
+    GoRoute(
+      path: AppRoutes.clienteChat,
+      pageBuilder: (context, state) => _fade(const ChatConductorScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.clienteCalificar,
+      pageBuilder: (context, state) => _fade(const CalificarServicioScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.clienteHistorialDetalle,
+      pageBuilder: (context, state) => _fade(const DetalleViajeScreen()),
+    ),
 
     // ── Flujo Conductor ──────────────────────────────────────────────────
     ShellRoute(

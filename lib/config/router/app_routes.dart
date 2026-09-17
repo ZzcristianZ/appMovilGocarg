@@ -9,6 +9,7 @@ class AppRoutes {
   // Cliente
   static const clienteHome = '/cliente';
   static const clienteHistorial = '/cliente/historial';
+  static const clienteHistorialDetalle = '/cliente/historial/detalle';
   static const clientePerfil = '/cliente/perfil';
   static const clienteNuevaSolicitud = '/cliente/solicitud/nueva';
   static const clienteSelectorUbicacion = '/cliente/solicitud/ubicacion';
@@ -16,6 +17,8 @@ class AppRoutes {
   static const clienteDetalleConductor = '/cliente/solicitud/conductor';
   static const clienteConfirmacion = '/cliente/solicitud/confirmacion';
   static const clienteSeguimiento = '/cliente/solicitud/seguimiento';
+  static const clienteChat = '/cliente/solicitud/chat';
+  static const clienteCalificar = '/cliente/solicitud/calificar';
 
   // Conductor
   static const conductorHome = '/conductor';

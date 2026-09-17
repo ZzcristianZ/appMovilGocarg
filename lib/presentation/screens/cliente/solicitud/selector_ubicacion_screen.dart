@@ -107,7 +107,8 @@ class _SelectorUbicacionScreenState extends State<SelectorUbicacionScreen> {
       if (placemarks.isNotEmpty) {
         final p = placemarks.first;
         final partes = [p.street, p.subLocality, p.locality]
-            .where((s) => s!.isNotEmpty)
+            .whereType<String>()
+            .where((s) => s.isNotEmpty)
             .toList();
         if (partes.isNotEmpty) {
           direccion = partes.join(', ');

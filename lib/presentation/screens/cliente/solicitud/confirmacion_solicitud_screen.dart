@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:gocarg/config/router/app_routes.dart';
 import 'package:gocarg/config/theme/app_colors.dart';
-import 'package:gocarg/config/theme/app_typography.dart';
 import 'package:gocarg/presentation/providers/solicitud_provider.dart';
 import 'package:gocarg/presentation/widgets/route_ticket_card.dart';
 
@@ -43,7 +42,6 @@ class ConfirmacionSolicitudScreen extends ConsumerWidget {
             destino: solicitud.destino,
             chips: [
               Chip(label: Text(conductor.tipo.nombre), side: BorderSide(color: colors.outline)),
-              Chip(label: Text(solicitud.tipoCarga), side: BorderSide(color: colors.outline)),
               if (solicitud.peso.isNotEmpty)
                 Chip(label: Text('${solicitud.peso} kg'), side: BorderSide(color: colors.outline)),
             ],
@@ -70,9 +68,22 @@ class ConfirmacionSolicitudScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                Text('\$${conductor.tarifaReferencia}', style: AppTypography.dato(fontSize: 16)),
               ],
             ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.handshake_outlined, size: 18, color: colors.onSurfaceVariant),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'El precio se acuerda con el conductor después de enviar la solicitud.',
+                  style: textTheme.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
+                ),
+              ),
+            ],
           ),
           if (solicitud.fecha != null || solicitud.hora != null) ...[
             const SizedBox(height: 16),
@@ -97,7 +108,7 @@ class ConfirmacionSolicitudScreen extends ConsumerWidget {
             child: ElevatedButton(
               onPressed: () {
                 ref.read(solicitudEnProgresoProvider.notifier).limpiar();
-                context.go(AppRoutes.clienteSeguimiento);
+                context.go(AppRoutes.clienteSeguimiento, extra: solicitud);
               },
               child: const Text('Confirmar solicitud'),
             ),

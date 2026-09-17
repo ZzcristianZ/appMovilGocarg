@@ -9,7 +9,6 @@ class SolicitudFlete {
   final ConductorDisponible conductor;
   final String origen;
   final String destino;
-  final String tipoCarga;
   final String peso;
   final DateTime? fecha;
   final TimeOfDay? hora;
@@ -18,7 +17,6 @@ class SolicitudFlete {
     required this.conductor,
     required this.origen,
     required this.destino,
-    required this.tipoCarga,
     this.peso = '',
     this.fecha,
     this.hora,

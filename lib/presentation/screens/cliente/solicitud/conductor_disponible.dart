@@ -13,7 +13,6 @@ class ConductorDisponible {
   final String placa;
   final double distanciaKm;
   final int etaMinutos;
-  final int tarifaReferencia;
   final double lat;
   final double lng;
 
@@ -27,7 +26,6 @@ class ConductorDisponible {
     required this.placa,
     required this.distanciaKm,
     required this.etaMinutos,
-    required this.tarifaReferencia,
     required this.lat,
     required this.lng,
   });
@@ -46,7 +44,6 @@ const conductoresDisponiblesMock = <ConductorDisponible>[
     placa: 'OCA-142',
     distanciaKm: 1.2,
     etaMinutos: 6,
-    tarifaReferencia: 85000,
     lat: 8.2420,
     lng: -73.3550,
   ),
@@ -60,7 +57,6 @@ const conductoresDisponiblesMock = <ConductorDisponible>[
     placa: 'OCA-587',
     distanciaKm: 0.6,
     etaMinutos: 3,
-    tarifaReferencia: 22000,
     lat: 8.2370,
     lng: -73.3600,
   ),
@@ -74,7 +70,6 @@ const conductoresDisponiblesMock = <ConductorDisponible>[
     placa: 'OCA-903',
     distanciaKm: 2.4,
     etaMinutos: 10,
-    tarifaReferencia: 92000,
     lat: 8.2450,
     lng: -73.3520,
   ),
@@ -88,7 +83,6 @@ const conductoresDisponiblesMock = <ConductorDisponible>[
     placa: 'OCA-221',
     distanciaKm: 0.9,
     etaMinutos: 4,
-    tarifaReferencia: 25000,
     lat: 8.2405,
     lng: -73.3610,
   ),

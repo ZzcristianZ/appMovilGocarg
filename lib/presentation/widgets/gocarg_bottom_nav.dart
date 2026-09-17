@@ -53,38 +53,41 @@ class GoCargBottomNav extends StatelessWidget {
               final item = items[i];
 
               return Expanded(
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () => onTap(i),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Material(
+                    color: Colors.transparent,
                     borderRadius: BorderRadius.circular(14),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 220),
-                      curve: Curves.easeInOut,
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      decoration: BoxDecoration(
-                        color: isSelected ? acento.withValues(alpha: 0.12) : Colors.transparent,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            isSelected ? item.activo : item.inactivo,
-                            color: isSelected ? acento : colors.outline,
-                            size: 22,
-                          ),
-                          const SizedBox(height: 3),
-                          Text(
-                            item.label,
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: isSelected ? FontWeight.w700 : FontWeight.normal,
-                              color: isSelected ? acento : colors.outline,
+                    clipBehavior: Clip.antiAlias,
+                    child: InkWell(
+                      onTap: () => onTap(i),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 220),
+                        curve: Curves.easeInOut,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: isSelected ? acento.withValues(alpha: 0.12) : Colors.transparent,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              isSelected ? item.activo : item.inactivo,
+                              color: isSelected ? acento : colors.onSurfaceVariant,
+                              size: 22,
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 3),
+                            Text(
+                              item.label,
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: isSelected ? FontWeight.w700 : FontWeight.normal,
+                                color: isSelected ? acento : colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

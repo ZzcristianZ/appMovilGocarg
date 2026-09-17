@@ -176,7 +176,7 @@ class _HeroHeader extends StatelessWidget {
                         child: Text(
                           '¿A dónde va tu carga?',
                           style: TextStyle(
-                              color: colors.outline, fontSize: 14),
+                              color: colors.onSurfaceVariant, fontSize: 14),
                         ),
                       ),
                       FilledButton(
@@ -382,7 +382,7 @@ class _StatsGrid extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   label,
-                  style: TextStyle(fontSize: 10, color: colors.outline),
+                  style: TextStyle(fontSize: 10, color: colors.onSurfaceVariant),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -422,7 +422,7 @@ class _RecentActivity extends StatelessWidget {
         'Solicitud pendiente',
         'Camión #5 · Usaquén → Soacha',
         'Hace 45 min',
-        colors.outline,
+        colors.onSurfaceVariant,
       ),
     ];
 
@@ -452,17 +452,19 @@ class _RecentActivity extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(title,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 13)),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                            color: colors.onSurface)),
                     const SizedBox(height: 2),
                     Text(subtitle,
                         style: TextStyle(
-                            fontSize: 11, color: colors.outline)),
+                            fontSize: 11, color: colors.onSurfaceVariant)),
                   ],
                 ),
               ),
               Text(time,
-                  style: TextStyle(fontSize: 10, color: colors.outline)),
+                  style: TextStyle(fontSize: 10, color: colors.onSurfaceVariant)),
             ],
           ),
         );

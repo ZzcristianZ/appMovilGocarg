@@ -22,20 +22,9 @@ class NuevaSolicitudScreen extends ConsumerStatefulWidget {
 class _NuevaSolicitudScreenState extends ConsumerState<NuevaSolicitudScreen> {
   String? _origen;
   String? _destino;
-  String _tipoCarga = 'General';
   DateTime? _fecha;
   TimeOfDay? _hora;
   final _pesoController = TextEditingController();
-
-  // Categorías provisionales — pendientes de definición final del proyecto
-  // (ver decisión pendiente sobre tipo de camión / tipo de carga).
-  static const _tiposCarga = [
-    'General',
-    'Frágil',
-    'Refrigerada',
-    'Materiales de construcción',
-    'Mudanza / muebles',
-  ];
 
   bool get _puedeContinuar => _origen != null && _destino != null;
 
@@ -147,28 +136,6 @@ class _NuevaSolicitudScreenState extends ConsumerState<NuevaSolicitudScreen> {
           ),
 
           const SizedBox(height: 24),
-          Text('Tipo de carga', style: textTheme.titleMedium),
-          const SizedBox(height: 10),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: _tiposCarga.map((tipo) {
-              final seleccionado = _tipoCarga == tipo;
-              return ChoiceChip(
-                label: Text(tipo),
-                selected: seleccionado,
-                onSelected: (_) => setState(() => _tipoCarga = tipo),
-                selectedColor: AppColors.cargaSuave,
-                labelStyle: TextStyle(
-                  color: seleccionado ? AppColors.rutaOscuro : colors.onSurfaceVariant,
-                  fontWeight: seleccionado ? FontWeight.w600 : FontWeight.normal,
-                ),
-                side: BorderSide(color: seleccionado ? AppColors.carga : colors.outline),
-              );
-            }).toList(),
-          ),
-
-          const SizedBox(height: 24),
           Text('Peso aproximado', style: textTheme.titleMedium),
           const SizedBox(height: 10),
           TextField(
@@ -216,7 +183,6 @@ class _NuevaSolicitudScreenState extends ConsumerState<NuevaSolicitudScreen> {
                               conductor: conductor,
                               origen: _origen!,
                               destino: _destino!,
-                              tipoCarga: _tipoCarga,
                               peso: _pesoController.text,
                               fecha: _fecha,
                               hora: _hora,
@@ -323,7 +289,7 @@ class _CampoFechaHora extends StatelessWidget {
             children: [
               Icon(icono, size: 18, color: colors.onSurfaceVariant),
               const SizedBox(width: 8),
-              Text(texto, style: AppTypography.dato(fontSize: 14)),
+              Text(texto, style: AppTypography.dato(fontSize: 14, color: colors.onSurface)),
             ],
           ),
         ),

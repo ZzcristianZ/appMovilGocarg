@@ -48,7 +48,7 @@ class DetalleConductorScreen extends StatelessWidget {
                       children: [
                         const Icon(Icons.star_rounded, size: 16, color: AppColors.carga),
                         const SizedBox(width: 2),
-                        Text('${conductor.calificacion}', style: AppTypography.dato(fontSize: 13)),
+                        Text('${conductor.calificacion}', style: AppTypography.dato(fontSize: 13, color: colors.onSurface)),
                         const SizedBox(width: 6),
                         Text(
                           '· ${conductor.viajesRealizados} viajes',
@@ -76,18 +76,13 @@ class DetalleConductorScreen extends StatelessWidget {
                 Icon(conductor.tipo.icono, color: colors.onSurfaceVariant),
                 const SizedBox(width: 12),
                 Expanded(child: Text(conductor.tipo.nombre, style: textTheme.bodyLarge)),
-                Text(conductor.placa, style: AppTypography.dato(fontSize: 14)),
+                Text(conductor.placa, style: AppTypography.dato(fontSize: 14, color: colors.onSurface)),
               ],
             ),
           ),
 
           const SizedBox(height: 24),
-          Text('Tarifa de referencia', style: textTheme.titleMedium),
-          const SizedBox(height: 6),
-          Text(
-            'El total final se calcula al confirmar la solicitud, según origen y destino.',
-            style: textTheme.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
-          ),
+          Text('Tarifa', style: textTheme.titleMedium),
           const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.all(16),
@@ -97,10 +92,14 @@ class DetalleConductorScreen extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Icon(Icons.sell_outlined, color: colors.onSurfaceVariant),
+                Icon(Icons.handshake_outlined, color: colors.onSurfaceVariant),
                 const SizedBox(width: 12),
-                Expanded(child: Text('Desde', style: textTheme.bodyLarge)),
-                Text('\$${conductor.tarifaReferencia}', style: AppTypography.dato(fontSize: 18)),
+                Expanded(
+                  child: Text(
+                    'El precio se acuerda con el conductor después de enviar la solicitud.',
+                    style: textTheme.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
+                  ),
+                ),
               ],
             ),
           ),
