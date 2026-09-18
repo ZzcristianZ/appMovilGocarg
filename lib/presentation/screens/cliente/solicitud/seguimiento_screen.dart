@@ -120,13 +120,13 @@ class SeguimientoScreen extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                Icon(estado.icono, color: entregado ? AppColors.rutaVerde : AppColors.rutaOscuro),
+                Icon(estado.icono, color: entregado ? AppColors.rutaVerde : colors.onSecondaryContainer),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     estado.titulo,
                     style: textTheme.titleMedium?.copyWith(
-                      color: entregado ? const Color(0xFF163A2B) : AppColors.rutaOscuro,
+                      color: entregado ? const Color(0xFF163A2B) : colors.onSecondaryContainer,
                     ),
                   ),
                 ),

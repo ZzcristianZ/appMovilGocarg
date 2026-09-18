@@ -23,6 +23,8 @@ class AppRoutes {
   // Conductor
   static const conductorHome = '/conductor';
   static const conductorSolicitudes = '/conductor/solicitudes';
+  static const conductorDetalleSolicitud = '/conductor/solicitudes/detalle';
+  static const conductorViajeEnCurso = '/conductor/solicitudes/viaje';
   static const conductorHistorial = '/conductor/historial';
   static const conductorPerfil = '/conductor/perfil';
 }

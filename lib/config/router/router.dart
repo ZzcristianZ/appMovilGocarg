@@ -114,5 +114,13 @@ final appRouter = GoRouter(
         ),
       ],
     ),
+    GoRoute(
+      path: AppRoutes.conductorDetalleSolicitud,
+      pageBuilder: (context, state) => _fade(const DetalleSolicitudScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.conductorViajeEnCurso,
+      pageBuilder: (context, state) => _fade(const ViajeEnCursoScreen()),
+    ),
   ],
 );
