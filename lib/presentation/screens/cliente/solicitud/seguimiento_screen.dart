@@ -1,70 +1,39 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:gocarg/config/router/app_routes.dart';
 import 'package:gocarg/config/theme/theme.dart';
+import 'package:gocarg/presentation/providers/providers.dart';
 import 'package:gocarg/presentation/widgets/widgets.dart';
 
-import 'solicitud_flete.dart';
-
-enum _EstadoViaje { confirmada, conductorEnCamino, cargaRecogida, enRuta, entregado }
-
-extension on _EstadoViaje {
+extension on EstadoSeguimiento {
   String get titulo => switch (this) {
-        _EstadoViaje.confirmada => 'Solicitud confirmada',
-        _EstadoViaje.conductorEnCamino => 'El conductor va en camino',
-        _EstadoViaje.cargaRecogida => 'Tu carga fue recogida',
-        _EstadoViaje.enRuta => 'En camino al destino',
-        _EstadoViaje.entregado => 'Carga entregada',
+        EstadoSeguimiento.confirmada => 'Solicitud confirmada',
+        EstadoSeguimiento.conductorEnCamino => 'El conductor va en camino',
+        EstadoSeguimiento.cargaRecogida => 'Tu carga fue recogida',
+        EstadoSeguimiento.enRuta => 'En camino al destino',
+        EstadoSeguimiento.entregado => 'Carga entregada',
       };
 
   IconData get icono => switch (this) {
-        _EstadoViaje.confirmada => Icons.task_alt_rounded,
-        _EstadoViaje.conductorEnCamino => Icons.local_shipping_rounded,
-        _EstadoViaje.cargaRecogida => Icons.inventory_2_rounded,
-        _EstadoViaje.enRuta => Icons.alt_route_rounded,
-        _EstadoViaje.entregado => Icons.check_circle_rounded,
+        EstadoSeguimiento.confirmada => Icons.task_alt_rounded,
+        EstadoSeguimiento.conductorEnCamino => Icons.local_shipping_rounded,
+        EstadoSeguimiento.cargaRecogida => Icons.inventory_2_rounded,
+        EstadoSeguimiento.enRuta => Icons.alt_route_rounded,
+        EstadoSeguimiento.entregado => Icons.check_circle_rounded,
       };
 }
 
 /// Seguimiento del servicio en curso: estado del viaje, mapa del conductor
-/// y acceso al chat. Sin backend todavía — el avance de estados es
-/// simulado localmente para poder mostrar el flujo completo.
-class SeguimientoScreen extends StatefulWidget {
+/// y acceso al chat. Sin backend todavía — el avance de estados lo simula
+/// [ViajeActivoNotifier], para que sobreviva a la navegación entre pestañas.
+class SeguimientoScreen extends ConsumerWidget {
   const SeguimientoScreen({super.key});
 
-  @override
-  State<SeguimientoScreen> createState() => _SeguimientoScreenState();
-}
-
-class _SeguimientoScreenState extends State<SeguimientoScreen> {
-  _EstadoViaje _estado = _EstadoViaje.confirmada;
-  Timer? _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
-      final siguiente = _estado.index + 1;
-      if (siguiente >= _EstadoViaje.values.length) {
-        timer.cancel();
-        return;
-      }
-      setState(() => _estado = _EstadoViaje.values[siguiente]);
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  Future<void> _cancelar() async {
+  Future<void> _cancelar(BuildContext context, WidgetRef ref) async {
     final confirmar = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -76,21 +45,28 @@ class _SeguimientoScreenState extends State<SeguimientoScreen> {
         ],
       ),
     );
-    if (confirmar == true && mounted) {
+    if (confirmar == true && context.mounted) {
+      ref.read(viajeActivoProvider.notifier).finalizar();
       context.go(AppRoutes.clienteHome);
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    final solicitud = GoRouterState.of(context).extra as SolicitudFlete?;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viaje = ref.watch(viajeActivoProvider);
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final entregado = _estado == _EstadoViaje.entregado;
 
-    if (solicitud == null) {
+    if (viaje == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Tu solicitud'), automaticallyImplyLeading: false),
+        appBar: AppBar(
+          title: const Text('Tu solicitud'),
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: () => context.go(AppRoutes.clienteHome),
+          ),
+        ),
         body: const ProximamenteView(
           icon: Icons.route_rounded,
           mensaje: 'Aquí verás el seguimiento en tiempo real de tu servicio.',
@@ -98,10 +74,21 @@ class _SeguimientoScreenState extends State<SeguimientoScreen> {
       );
     }
 
+    final solicitud = viaje.solicitud;
+    final estado = viaje.estado;
+    final entregado = estado == EstadoSeguimiento.entregado;
     final conductor = solicitud.conductor;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Tu solicitud'), automaticallyImplyLeading: false),
+      appBar: AppBar(
+        title: const Text('Tu solicitud'),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded),
+          tooltip: 'Ir a Inicio (el viaje sigue en curso)',
+          onPressed: () => context.go(AppRoutes.clienteHome),
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
         children: [
@@ -133,11 +120,11 @@ class _SeguimientoScreenState extends State<SeguimientoScreen> {
             ),
             child: Row(
               children: [
-                Icon(_estado.icono, color: entregado ? AppColors.rutaVerde : AppColors.rutaOscuro),
+                Icon(estado.icono, color: entregado ? AppColors.rutaVerde : AppColors.rutaOscuro),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    _estado.titulo,
+                    estado.titulo,
                     style: textTheme.titleMedium?.copyWith(
                       color: entregado ? const Color(0xFF163A2B) : AppColors.rutaOscuro,
                     ),
@@ -148,7 +135,7 @@ class _SeguimientoScreenState extends State<SeguimientoScreen> {
           ),
 
           const SizedBox(height: 20),
-          _LineaDeTiempo(estadoActual: _estado),
+          _LineaDeTiempo(estadoActual: estado),
 
           const SizedBox(height: 24),
           RouteTicketCard(
@@ -211,10 +198,13 @@ class _SeguimientoScreenState extends State<SeguimientoScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: () => context.push(
-                  AppRoutes.clienteCalificar,
-                  extra: (nombre: conductor.nombre, iniciales: conductor.iniciales),
-                ),
+                onPressed: () {
+                  ref.read(viajeActivoProvider.notifier).finalizar();
+                  context.push(
+                    AppRoutes.clienteCalificar,
+                    extra: (nombre: conductor.nombre, iniciales: conductor.iniciales),
+                  );
+                },
                 icon: const Icon(Icons.star_outline_rounded),
                 label: const Text('Calificar viaje'),
               ),
@@ -224,7 +214,12 @@ class _SeguimientoScreenState extends State<SeguimientoScreen> {
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
-              onPressed: entregado ? () => context.go(AppRoutes.clienteHome) : _cancelar,
+              onPressed: entregado
+                  ? () {
+                      ref.read(viajeActivoProvider.notifier).finalizar();
+                      context.go(AppRoutes.clienteHome);
+                    }
+                  : () => _cancelar(context, ref),
               child: Text(entregado ? 'Volver al inicio' : 'Cancelar solicitud'),
             ),
           ),
@@ -235,7 +230,7 @@ class _SeguimientoScreenState extends State<SeguimientoScreen> {
 }
 
 class _LineaDeTiempo extends StatelessWidget {
-  final _EstadoViaje estadoActual;
+  final EstadoSeguimiento estadoActual;
   const _LineaDeTiempo({required this.estadoActual});
 
   @override
@@ -243,9 +238,9 @@ class _LineaDeTiempo extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return Column(
-      children: _EstadoViaje.values.map((estado) {
+      children: EstadoSeguimiento.values.map((estado) {
         final completado = estado.index <= estadoActual.index;
-        final esUltimo = estado == _EstadoViaje.values.last;
+        final esUltimo = estado == EstadoSeguimiento.values.last;
 
         return IntrinsicHeight(
           child: Row(

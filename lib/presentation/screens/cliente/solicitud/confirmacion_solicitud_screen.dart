@@ -108,7 +108,8 @@ class ConfirmacionSolicitudScreen extends ConsumerWidget {
             child: ElevatedButton(
               onPressed: () {
                 ref.read(solicitudEnProgresoProvider.notifier).limpiar();
-                context.go(AppRoutes.clienteSeguimiento, extra: solicitud);
+                ref.read(viajeActivoProvider.notifier).iniciar(solicitud);
+                context.go(AppRoutes.clienteSeguimiento);
               },
               child: const Text('Confirmar solicitud'),
             ),

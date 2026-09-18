@@ -240,7 +240,7 @@ class _ProfileHeader extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Text(
-              'Operador · Plan Estándar',
+              'Cliente verificado',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 12,
